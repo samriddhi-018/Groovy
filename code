@@ -1,0 +1,599 @@
+#include <iostream>
+#include <string>
+#include <windows.h>
+#include <mmsystem.h>
+
+using namespace std;
+
+// Node structure to store string data
+struct Node {
+    string data;
+    Node* next;
+    Node* prev;
+};
+
+class PlayList {
+private:
+    Node* head;
+    Node* currentSong;
+public:
+    PlayList() {
+        head = NULL;
+        currentSong = NULL;
+    }
+
+    // Add a new element at the end of the list
+    void push_back(string newElement) {
+        Node* newNode = new Node();
+        newNode->data = newElement;
+        newNode->next = NULL;
+        newNode->prev = NULL;
+        if (head == NULL) {
+            head = newNode;
+            currentSong = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != NULL)
+                temp = temp->next;
+            temp->next = newNode;
+            newNode->prev = temp;
+        }
+    }
+
+    // Search for an element in the list
+    void SearchElement(string searchValue) {
+        Node* temp = head;
+        int found = 0;
+
+        if (temp != NULL) {
+            while (temp != NULL) {
+                if (temp->data == searchValue) {
+                    found++;
+                    break;
+                }
+                temp = temp->next;
+            }
+            if (found == 1) {
+                while (true) {
+                    cout << "1. Play file\n2. Play previous\n3. Play next\n4. Exit\n";
+                    int ch;
+                    cin >> ch;
+
+                    // Clear the input buffer
+                    while (cin.get() != '\n');
+
+                    if (ch == 1) {
+                        PlayCurrentSong(searchValue);
+                    } else if (ch == 2) {
+                        if (currentSong->prev == NULL) {
+                            cout << "No previous element\n";
+                        } else {
+                            currentSong = currentSong->prev;
+                            PlayCurrentSong(currentSong->data);
+                            
+                        }
+                    } else if (ch == 3) {
+                        if (currentSong->next == NULL) {
+                            cout << "No next element\n";
+                        } else {
+                            currentSong = currentSong->next;
+                            PlayCurrentSong(currentSong->data);
+                        }
+                    } else if (ch == 4) {
+                        break;
+                    }
+                }
+            } else {
+                cout << searchValue << " is not found in the list.\n";
+            }
+        } else {
+            cout << "The list is empty.\n";
+        }
+    }
+
+    // Play the currently selected song
+    void PlayCurrentSong(string songName) {
+        cout << "Playing music: " << songName << endl;
+        wstring sound = wstring(songName.begin(), songName.end()) + L".wav";
+        PlaySoundW(sound.c_str(), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+        // Wait for user input to stop the music
+        cout << "Enter 'stop' to stop the music: ";
+        string input;
+        cin >> input;
+        if (input == "stop") {
+            PlaySound(0, 0, 0);
+            cout << "Stopped music\n";
+        }
+    }
+
+    // Rest of your code remains the same
+
+    // ...
+    string Getnth(Node* head, int index) {
+        Node* current = head;
+        int count = 0;
+        while (current != NULL) {
+            if (count == index) {
+                return current->data;
+            }
+            count++;
+            current = current->next;
+        }
+        return ""; // Return an empty string if the index is out of bounds
+    }
+
+    // Display the content of the list
+    void PrintList() {
+        Node* temp = head;
+        if (temp != NULL) {
+            cout << "The list contains: ";
+            while (temp != NULL) {
+                cout << temp->data << "\n";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+        else {
+            cout << "The list is empty.\n";
+        }
+    }
+};
+class LikedSongs {
+private:
+    Node* head;
+    Node* currentSong;
+public:
+    LikedSongs() {
+        head = NULL;
+        currentSong = NULL;
+    }
+
+    // Add a new element at the end of the list
+    void push_back(string newElement) {
+        Node* newNode = new Node();
+        newNode->data = newElement;
+        newNode->next = NULL;
+        newNode->prev = NULL;
+        if (head == NULL) {
+            head = newNode;
+            currentSong = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != NULL)
+                temp = temp->next;
+            temp->next = newNode;
+            newNode->prev = temp;
+        }
+    }
+
+    // Search for an element in the list
+    void SearchElement(string searchValue) {
+        Node* temp = head;
+        int found = 0;
+
+        if (temp != NULL) {
+            while (temp != NULL) {
+                if (temp->data == searchValue) {
+                    found++;
+                    break;
+                }
+                temp = temp->next;
+            }
+            if (found == 1) {
+                while (true) {
+                    cout << "1. Play file\n2. Play previous\n3. Play next\n4. Exit\n";
+                    int ch;
+                    cin >> ch;
+
+                    // Clear the input buffer
+                    while (cin.get() != '\n');
+
+                    if (ch == 1) {
+                        PlayCurrentSong(searchValue);
+                    } else if (ch == 2) {
+                        if (currentSong->prev == NULL) {
+                            cout << "No previous element\n";
+                        } else {
+                            currentSong = currentSong->prev;
+                            PlayCurrentSong(currentSong->data);
+                            
+                        }
+                    } else if (ch == 3) {
+                        if (currentSong->next == NULL) {
+                            cout << "No next element\n";
+                        } else {
+                            currentSong = currentSong->next;
+                            PlayCurrentSong(currentSong->data);
+                        }
+                    } else if (ch == 4) {
+                        break;
+                    }
+                }
+            } else {
+                cout << searchValue << " is not found in the list.\n";
+            }
+        } else {
+            cout << "The list is empty.\n";
+        }
+    }
+
+    // Play the currently selected song
+    void PlayCurrentSong(string songName) {
+        cout << "Playing music: " << songName << endl;
+        wstring sound = wstring(songName.begin(), songName.end()) + L".wav";
+        PlaySoundW(sound.c_str(), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+        // Wait for user input to stop the music
+        cout << "Enter 'stop' to stop the music: ";
+        string input;
+        cin >> input;
+        if (input == "stop") {
+            PlaySound(0, 0, 0);
+            cout << "Stopped music\n";
+        }
+    }
+
+    // Rest of your code remains the same
+
+    // ...
+    string Getnth(Node* head, int index) {
+        Node* current = head;
+        int count = 0;
+        while (current != NULL) {
+            if (count == index) {
+                return current->data;
+            }
+            count++;
+            current = current->next;
+        }
+        return ""; // Return an empty string if the index is out of bounds
+    }
+
+    // Display the content of the list
+    void PrintList() {
+        Node* temp = head;
+        if (temp != NULL) {
+            cout << "The list contains: ";
+            while (temp != NULL) {
+                cout << temp->data << "\n";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+        else {
+            cout << "The list is empty.\n";
+        }
+    }
+};
+class Recommended {
+private:
+    Node* head;
+    Node* currentSong;
+public:
+    Recommended() {
+        head = NULL;
+        currentSong = NULL;
+    }
+
+    // Add a new element at the end of the list
+    void push_back(string newElement) {
+        Node* newNode = new Node();
+        newNode->data = newElement;
+        newNode->next = NULL;
+        newNode->prev = NULL;
+        if (head == NULL) {
+            head = newNode;
+            currentSong = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != NULL)
+                temp = temp->next;
+            temp->next = newNode;
+            newNode->prev = temp;
+        }
+    }
+
+    // Search for an element in the list
+    void SearchElement(string searchValue) {
+        Node* temp = head;
+        int found = 0;
+
+        if (temp != NULL) {
+            while (temp != NULL) {
+                if (temp->data == searchValue) {
+                    found++;
+                    break;
+                }
+                temp = temp->next;
+            }
+            if (found == 1) {
+                while (true) {
+                    cout << "1. Play file\n2. Play previous\n3. Play next\n4. Exit\n";
+                    int ch;
+                    cin >> ch;
+
+                    // Clear the input buffer
+                    while (cin.get() != '\n');
+
+                    if (ch == 1) {
+                        PlayCurrentSong(searchValue);
+                    } else if (ch == 2) {
+                        if (currentSong->prev == NULL) {
+                            cout << "No previous element\n";
+                        } else {
+                            currentSong = currentSong->prev;
+                            PlayCurrentSong(currentSong->data);
+                            
+                        }
+                    } else if (ch == 3) {
+                        if (currentSong->next == NULL) {
+                            cout << "No next element\n";
+                        } else {
+                            currentSong = currentSong->next;
+                            PlayCurrentSong(currentSong->data);
+                        }
+                    } else if (ch == 4) {
+                        break;
+                    }
+                }
+            } else {
+                cout << searchValue << " is not found in the list.\n";
+            }
+        } else {
+            cout << "The list is empty.\n";
+        }
+    }
+
+    // Play the currently selected song
+    void PlayCurrentSong(string songName) {
+        cout << "Playing music: " << songName << endl;
+        wstring sound = wstring(songName.begin(), songName.end()) + L".wav";
+        PlaySoundW(sound.c_str(), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+        // Wait for user input to stop the music
+        cout << "Enter 'stop' to stop the music: ";
+        string input;
+        cin >> input;
+        if (input == "stop") {
+            PlaySound(0, 0, 0);
+            cout << "Stopped music\n";
+        }
+    }
+
+    // Rest of your code remains the same
+
+    // ...
+    string Getnth(Node* head, int index) {
+        Node* current = head;
+        int count = 0;
+        while (current != NULL) {
+            if (count == index) {
+                return current->data;
+            }
+            count++;
+            current = current->next;
+        }
+        return ""; // Return an empty string if the index is out of bounds
+    }
+
+    // Display the content of the list
+    void PrintList() {
+        Node* temp = head;
+        if (temp != NULL) {
+            cout << "The list contains: ";
+            while (temp != NULL) {
+                cout << temp->data << "\n";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+        else {
+            cout << "The list is empty.\n";
+        }
+    }
+};
+class Searched {
+private:
+    Node* head;
+    Node* currentSong;
+public:
+    Searched() {
+        head = NULL;
+        currentSong = NULL;
+    }
+
+    // Add a new element at the end of the list
+    void push_back(string newElement) {
+        Node* newNode = new Node();
+        newNode->data = newElement;
+        newNode->next = NULL;
+        newNode->prev = NULL;
+        if (head == NULL) {
+            head = newNode;
+            currentSong = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != NULL)
+                temp = temp->next;
+            temp->next = newNode;
+            newNode->prev = temp;
+        }
+    }
+
+    // Search for an element in the list
+    void SearchElement(string searchValue) {
+        Node* temp = head;
+        int found = 0;
+
+        if (temp != NULL) {
+            while (temp != NULL) {
+                if (temp->data == searchValue) {
+                    found++;
+                    break;
+                }
+                temp = temp->next;
+            }
+            if (found == 1) {
+                while (true) {
+                    cout << "1. Play file\n2. Play previous\n3. Play next\n4. Exit\n";
+                    int ch;
+                    cin >> ch;
+
+                    // Clear the input buffer
+                    while (cin.get() != '\n');
+
+                    if (ch == 1) {
+                        PlayCurrentSong(searchValue);
+                    } else if (ch == 2) {
+                        if (currentSong->prev == NULL) {
+                            cout << "No previous element\n";
+                        } else {
+                            currentSong = currentSong->prev;
+                            PlayCurrentSong(currentSong->data);
+                            
+                        }
+                    } else if (ch == 3) {
+                        if (currentSong->next == NULL) {
+                            cout << "No next element\n";
+                        } else {
+                            currentSong = currentSong->next;
+                            PlayCurrentSong(currentSong->data);
+                        }
+                    } else if (ch == 4) {
+                        break;
+                    }
+                }
+            } else {
+                cout << searchValue << " is not found in the list.\n";
+            }
+        } else {
+            cout << "The list is empty.\n";
+        }
+    }
+
+    // Play the currently selected song
+    void PlayCurrentSong(string songName) {
+        cout << "Playing music: " << songName << endl;
+        wstring sound = wstring(songName.begin(), songName.end()) + L".wav";
+        PlaySoundW(sound.c_str(), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+        // Wait for user input to stop the music
+        cout << "Enter 'stop' to stop the music: ";
+        string input;
+        cin >> input;
+        if (input == "stop") {
+            PlaySound(0, 0, 0);
+            cout << "Stopped music\n";
+        }
+    }
+
+    // Rest of your code remains the same
+
+    // ...
+    string Getnth(Node* head, int index) {
+        Node* current = head;
+        int count = 0;
+        while (current != NULL) {
+            if (count == index) {
+                return current->data;
+            }
+            count++;
+            current = current->next;
+        }
+        return ""; // Return an empty string if the index is out of bounds
+    }
+
+    // Display the content of the list
+    void PrintList() {
+        Node* temp = head;
+        if (temp != NULL) {
+            cout << "The list contains: ";
+            while (temp != NULL) {
+                cout << temp->data << "\n";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+        else {
+            cout << "The list is empty.\n";
+        }
+    }
+};
+int main(){
+	while (true){
+	cout<<"---------------------------Groovy:Tune Into Life's Rhythm---------------------------\nMenu:\n1.Show Playlist\n2.Liked Songs\n3.Recommended Songs\n4.Search\n5.Exit\nEnter Your Choice: ";
+    int ch;
+    cin>>ch;
+    if(ch==1){
+        PlayList MyPlayList;
+        MyPlayList.push_back("tere_hawale");
+        MyPlayList.push_back("The_Night_We_Met");
+        MyPlayList.push_back("A_Thousand_Years");
+
+        MyPlayList.PrintList();
+
+        string song;
+        cout<<"Enter song you wish to play";
+        cin>>song;
+        MyPlayList.SearchElement(song);
+    }
+    else if(ch==2){
+        LikedSongs LikedList;
+
+        LikedList.push_back("Night_Changes");
+        LikedList.push_back("Alag_Aasmaan");
+        LikedList.push_back("Bheegi_Si_Bhaagi_Si");
+
+        LikedList.PrintList();
+
+        string song;
+        cout<<"Enter song you wish to play";
+        cin>>song;
+        LikedList.SearchElement(song);
+    }
+    else if(ch==3){ 
+        Recommended RecList;
+
+        RecList.push_back("Offo");
+        RecList.push_back("Willow");
+        RecList.push_back("This_Town");
+
+        RecList.PrintList();
+
+        string song;
+        cout<<"Enter song you wish to play";
+        cin>>song;
+        RecList.SearchElement(song);
+    }
+    else if(ch==4){
+        Searched MyList;
+
+        MyList.push_back("tere_hawale");
+        MyList.push_back("The_Night_We_Met");
+        MyList.push_back("A_Thousand_Years");
+        MyList.push_back("Night_Changes");
+        MyList.push_back("Alag_Aasmaan");
+        MyList.push_back("Bheegi_Si_Bhaagi_Si");
+        MyList.push_back("Offo");
+        MyList.push_back("Willow");
+        MyList.push_back("This_Town");
+        MyList.push_back("Tu_Chahiye");
+        MyList.push_back("Tera_Hone_Laga_Hoon");
+        MyList.push_back("Dandelions");
+
+        string song;
+        cout<<"Enter song you wish to play";
+        cin>>song;
+        MyList.SearchElement(song);
+    }
+    else if(ch==5){
+        cout<<"Thanks! For using Groovy."<<endl;
+        break;
+    }
+    else{
+        cout<<"Enter valid choice.\n";
+    }
+}
+	}
+    
